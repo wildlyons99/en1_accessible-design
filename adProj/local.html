@@ -10,13 +10,53 @@
 
 	<!-- SERVICE DOCK -->
 	<div id="servicedock">
-		<service-airtable id="service_airtable" tablename="myProject"></service-airtable>
+		<service-airtable id="service_airtable" tablename="shuffle"></service-airtable>
 		<service-spike id="service_spike"></service-spike>
 	</div>
 
-	<h1>My Project (Local Interface)</h1>
+	<h1>Local Interface</h1>
 
 	<!-- CREATE YOUR PROJECT HERE -->
+    <p>adjusting motor positions in a shooter robot.</p>
+
+        <div class="cloud_check">
+            <b><em>Monitor Cloud:</em></b>
+
+        <div type="cloud_check" cloud_compare="equal" cloud_action="download_code">
+                <input type=text id="cloud_name" value="P1_Ready">
+                <input type=text id="cloud_value" value="Ready">
+        <input type=text id="cloud_action_val" value="0">
+                <textarea id="cloud_code"># MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
+    from spike import PrimeHub, Motor
+    from spike.control import wait_for_seconds
+
+    hub = PrimeHub()
+
+    message = 'str(CLOUD[P1_Pos])'
+    hub.light_matrix.write(message)
+    message = 'str(CLOUD[P1_Ang])'
+    hub.light_matrix.write(message)
+    message = 'str(CLOUD[P1_Pow])'
+    hub.light_matrix.write(message)
+    
+    <!-- # horizontal position on Motor A:
+    h_motor = Motor('A')
+    h_motor.run_to_position(CLOUD[position_horizontal],'shortest path',20)
+    # vertical position on Motor B:
+    v_motor = Motor('B')
+    v_motor.run_to_position(CLOUD[position_vertical],'shortest path',20)
+    # shooter on Motor C:
+    s_motor = Motor('C')
+    s_motor.start(100)
+    wait_for_seconds(2)
+    s_motor.stop() -->
+    
+    
+    </textarea>
+                <input type=text id="cloud_reset" value="">
+        </div>
+
+        </div>
 
 	<hr>
 
