@@ -47,16 +47,33 @@
     </p>
     <p>Set Player 1 Power:
     <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='0' cloud_max='100' min='0' max='100' value='0'>
+    <span id="dpow"> </span>
     </p>
   </div>
 
      <script> 
-        var slider = document.getElementById("pos");
-        var output = document.getElementById("dpos");
-        output.innerHTML = slider.value;
+        var slider1 = document.getElementById("pos");
+        var output1 = document.getElementById("dpos");
+        output1.innerHTML = slider1.value;
 
-        slider.oninput = function() {
-            output.innerHTML = this.value;
+        slider1.oninput = function() {
+            output1.innerHTML = this.value;
+        }
+
+        var slider2 = document.getElementById("ang");
+        var output2 = document.getElementById("dang");
+        output2.innerHTML = slider2.value;
+
+        slider2.oninput = function() {
+            output2.innerHTML = this.value;
+        }
+
+        var slider3 = document.getElementById("pow");
+        var output3 = document.getElementById("dpow");
+        output3.innerHTML = slider2.value;
+
+        slider3.oninput = function() {
+            output3.innerHTML = this.value;
         }
     </script>
 
