@@ -53,6 +53,36 @@
 
         </div>
 
+
+
+
+        <p>Second to Launch</p>
+
+        <div class="cloud_check">
+            <b><em>Monitor Cloud:</em></b>
+
+        <div type="cloud_check" cloud_compare="equal" cloud_action="download_code">
+                <input type=text id="cloud_name" value="P1_Ready">
+                <input type=text id="cloud_value" value="Ready">
+        <input type=text id="cloud_action_val" value="0">
+        <textarea id="cloud_code"># MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
+    from spike import PrimeHub, Motor
+    from spike.control import wait_for_seconds
+
+    hub = PrimeHub()
+
+    message = CLOUD[P1_Pos]
+    hub.light_matrix.write(message)
+    message = CLOUD[P1_Ang]
+    hub.light_matrix.write(message)
+    message = CLOUD[P1_Pow]
+    hub.light_matrix.write(message)
+    </textarea>
+                <input type=text id="cloud_reset" value="">
+        </div>
+
+        </div>
+
 	<hr>
 
 	<h2>My Project Quick Links:</h2>
