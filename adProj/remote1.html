@@ -47,12 +47,15 @@
     <input type=range id="ang" cloud_action='update' cloud_name='P1_Ang' cloud_min='0' cloud_max='180' min='0' max='180' value='0'>
     <span id="dang"> </span>
     </p>
+
+    <p class="center"><button onclick="score_check()" class="btn-dark center" cloud_action='update' cloud_name='P1_Ready'>View Aim</button></p>
+
     <p>Power:
     <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='0' cloud_max='100' min='0' max='100' value='0'>
     <span id="dpow"> </span>
     </p>
     
-  <p class="center"><button onclick="score_check()" class="btn-dark center" cloud_action='update' cloud_name='P1_Ready'>Ready</button></p>
+  <p class="center"><button style="height:75px;width:200px;" onclick="score_check()" class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button></p>
 
 
     <br>
@@ -94,12 +97,12 @@
             p1_output.innerHTML = 4
             p2_output.innerHTML = p2_score
 
-            setTimeout(score_check, 50)
+            setTimeout(score_check, 2000)
         }
         
         var p1_output = document.getElementById("span1");
         var p2_output = document.getElementById("p2-score");
-        // var p1_score = cloud_get('P1_Score')
+        var p1_score = cloud_get('P1_Score')
         // var p2_score = cloud_connection.getEntryValue(P2_Score)
         // cloud_get(P2_Score)
         p1_output.innerHTML = 4
