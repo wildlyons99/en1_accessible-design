@@ -685,16 +685,16 @@ function page_setup_convert_HTML() {
   }
 }
 
-function score_check() {
-            var p1_output = document.getElementById('span1');
-            var p2_output = document.getElementById("p2-score");
-            var p1_score = cloud_get('P1_Score');
-            var p2_score = cloud_get('P2_Score');
-            p1_output.innerHTML = p1_score;
-            p2_output.innerHTML = p2_score;
+// function score_check() {
+//             var p1_output = document.getElementById('span1');
+//             var p2_output = document.getElementById("p2-score");
+//             var p1_score = cloud_get('P1_Score');
+//             var p2_score = cloud_get('P2_Score');
+//             p1_output.innerHTML = p1_score;
+//             p2_output.innerHTML = p2_score;
 
-            setTimeout(score_check, 2000);
-        }
+//             setTimeout(score_check, 2000);
+//         }
 
 
 //////////////////////

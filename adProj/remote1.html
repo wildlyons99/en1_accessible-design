@@ -39,23 +39,28 @@
 	<!-- Sliders for Determining Position -->
     <div class="container-fluid center" 
     <img src="images/power.png" alt="power">
-    <p>Position on the Board: <img src="../images/power.png" width="50" alt="power">
+    <p><img src="../images/position.png" width="50" alt="position"> Position on the Board: 
     <input type=range id="pos" cloud_action='update' cloud_name='P1_Pos' cloud_min='0' cloud_max='10' min='0' max='10' value='0'>
     <span id="dpos"> </span> 
     </p>
-    <p>Shooting Angle:
+    <p><img src="../images/rotate.png" width="50" alt="aim"> Shooting Angle: 
     <input type=range id="ang" cloud_action='update' cloud_name='P1_Ang' cloud_min='0' cloud_max='180' min='0' max='180' value='0'>
     <span id="dang"> </span>
     </p>
+    
+    <p class="center"> 
+        <img src="../images/aim.png" width="50" alt="aim">
+        <button class="btn-dark center" cloud_action='update' cloud_name='P1_Ready'>View Aim</button></p>
+    
 
-    <p class="center"><button class="btn-dark center" cloud_action='update' cloud_name='P1_Ready'>View Aim</button></p>
-
-    <p>Power:
+    <p><img src="../images/power.png" width="50" alt="power"> Power: 
     <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='0' cloud_max='100' min='0' max='100' value='0'>
     <span id="dpow"> </span>
     </p>
     
-  <p class="center"><button style="height:75px;width:200px;" class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button></p>
+  <p class="center">
+      <img src="../images/launch.png" width="50" alt="launch">
+      <button style="height:75px;width:200px;" class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button></p>
 
 
     <br>
