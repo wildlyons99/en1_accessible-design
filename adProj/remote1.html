@@ -39,7 +39,7 @@
 	<!-- Sliders for Determining Position -->
     <div class="container-fluid center" 
     <img src="images/power.png" alt="power">
-    <p>Position on the Board: <img src="images/power.png" alt="power">
+    <p>Position on the Board: <img src="../images/power.png" width="50" alt="power">
     <input type=range id="pos" cloud_action='update' cloud_name='P1_Pos' cloud_min='0' cloud_max='10' min='0' max='10' value='0'>
     <span id="dpos"> </span> 
     </p>
@@ -48,14 +48,14 @@
     <span id="dang"> </span>
     </p>
 
-    <p class="center"><button onclick="score_check()" class="btn-dark center" cloud_action='update' cloud_name='P1_Ready'>View Aim</button></p>
+    <p class="center"><button class="btn-dark center" cloud_action='update' cloud_name='P1_Ready'>View Aim</button></p>
 
     <p>Power:
     <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='0' cloud_max='100' min='0' max='100' value='0'>
     <span id="dpow"> </span>
     </p>
     
-  <p class="center"><button style="height:75px;width:200px;" onclick="score_check()" class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button></p>
+  <p class="center"><button style="height:75px;width:200px;" class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button></p>
 
 
     <br>
@@ -89,24 +89,16 @@
         }
 
         
-        function score_check() {
+        /* function score_check() {
             var p1_output = document.getElementById('span1');
             var p2_output = document.getElementById("p2-score");
-            var p1_score = cloud_get('P1_Score')
-            var p2_score = cloud_get('P2_Score')
-            p1_output.innerHTML = 4
-            p2_output.innerHTML = p2_score
+            var p1_score = cloud_get('P1_Score');
+            var p2_score = cloud_get('P2_Score');
+            p1_output.innerHTML = p1_score;
+            p2_output.innerHTML = p2_score;
 
-            setTimeout(score_check, 2000)
-        }
-        
-        var p1_output = document.getElementById("span1");
-        var p2_output = document.getElementById("p2-score");
-        var p1_score = cloud_get('P1_Score')
-        // var p2_score = cloud_connection.getEntryValue(P2_Score)
-        // cloud_get(P2_Score)
-        p1_output.innerHTML = 4
-        p2_output.innerHTML = p2_score
+            setTimeout(score_check, 2000);
+        }*/ 
 
 
     </script>

@@ -16,6 +16,7 @@ var cloud_connection_type; // "Airtable" and "SystemLink" are two allowed types
 var spike_connections; // array of SPIKE connections (e.g. in case multiple)
 var mySPIKE; // the first SPIKE connection in the array of SPIKE connections
 
+
 // how often to check (poll) cloud data for updates
 var monitor_cloud_frequency = 2000; // in ms
 
@@ -684,10 +685,24 @@ function page_setup_convert_HTML() {
   }
 }
 
+function score_check() {
+            var p1_output = document.getElementById('span1');
+            var p2_output = document.getElementById("p2-score");
+            var p1_score = cloud_get('P1_Score');
+            var p2_score = cloud_get('P2_Score');
+            p1_output.innerHTML = p1_score;
+            p2_output.innerHTML = p2_score;
+
+            setTimeout(score_check, 2000);
+        }
+
+
 //////////////////////
 //    INITIALIZER   //
 //////////////////////
 window.addEventListener('load', function () {
+
+    score_check();
 
   // On page load, these are the things that should happen (in order):
   // 1. call "onload_pre()" if function exists
@@ -777,6 +792,7 @@ window.addEventListener('load', function () {
     spike_connections = null; // global variable
     mySPIKE = null; // global variable
   }
+
 
   // 5. CHECK TO SEE IF A "POST" FUNCTION NEEDS TO RUN
   // - this is a function called "onload_post()" defined
