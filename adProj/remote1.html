@@ -27,28 +27,37 @@
 	</div>
 
     <!-- Creating Player 1 Jumbotron on Top -->
-    <div class="p-5 mb-4 bg-light rounded-3">
+    <div class="p-2 mb-4 rounded-3" style="background-color: #eb4646;">
       <div class="container-fluid py-5">
-        <h1 class="display-1 fw-bold center">Player 1</h1>
+        <!-- #21ad3b -->
+        <h1 class="display-1 fw-bold center" style="color: white;">Player 1</h1>
       </div>
     </div>
 
-  <h1>My Project (Remote Interface)</h1>
+    <br>
 
 	<!-- Sliders for Determining Position -->
     <div class="container-fluid center" 
-    <p>Set Player 1 Position on the Board:
+    <img src="images/power.png" alt="power">
+    <p>Position on the Board: <img src="images/power.png" alt="power">
     <input type=range id="pos" cloud_action='update' cloud_name='P1_Pos' cloud_min='0' cloud_max='10' min='0' max='10' value='0'>
     <span id="dpos"> </span> 
     </p>
-    <p>Set Player 1 shooting Angle:
+    <p>Shooting Angle:
     <input type=range id="ang" cloud_action='update' cloud_name='P1_Ang' cloud_min='0' cloud_max='180' min='0' max='180' value='0'>
     <span id="dang"> </span>
     </p>
-    <p>Set Player 1 Power:
+    <p>Power:
     <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='0' cloud_max='100' min='0' max='100' value='0'>
     <span id="dpow"> </span>
     </p>
+    
+  <p class="center"><button onclick="score_check()" class="btn-dark center" cloud_action='update' cloud_name='P1_Ready'>Ready</button></p>
+
+
+    <br>
+    <h3> Score </h3>
+    <p> <span id="span1"> </span> - <span id="p2-score"> </span> </p>
   </div>
 
      <script> 
@@ -75,21 +84,40 @@
         slider3.oninput = function() {
             output3.innerHTML = this.value;
         }
+
+        
+        function score_check() {
+            var p1_output = document.getElementById('span1');
+            var p2_output = document.getElementById("p2-score");
+            var p1_score = cloud_get('P1_Score')
+            var p2_score = cloud_get('P2_Score')
+            p1_output.innerHTML = 4
+            p2_output.innerHTML = p2_score
+
+            setTimeout(score_check, 50)
+        }
+        
+        var p1_output = document.getElementById("span1");
+        var p2_output = document.getElementById("p2-score");
+        // var p1_score = cloud_get('P1_Score')
+        // var p2_score = cloud_connection.getEntryValue(P2_Score)
+        // cloud_get(P2_Score)
+        p1_output.innerHTML = 4
+        p2_output.innerHTML = p2_score
+
+
+    </script>
+    
+    <br><hr>
+    <div class="center"> <div id="google_translate_element"></div> </div>
+
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
     </script>
 
-  <p><button cloud_action='update' cloud_name='P1_Ready'>Ready</button></p>
-
-	<hr>
-
-	
-    <h2>My Project Quick Links:</h2>
-  <p>
-    <ul>
-      <li><a href="./myProject_remote.html" target=_blank>My Project Remote Page</a></li>
-      <li><a href="./myProject_local.html" target=_blank>My Project Local Page</a></li>
-    </ul>
-  </p>
-	<p><a href="../index.html">Return back to the main homepage.</a></p>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>

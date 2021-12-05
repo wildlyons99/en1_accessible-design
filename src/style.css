@@ -109,7 +109,7 @@ https://www.w3schools.com/css/default.asp
 
 .center {
   text-align: center;
-  border: 3px solid green;
+  /* border: 3px solid green; */
 }
 
 .slider {
