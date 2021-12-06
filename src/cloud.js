@@ -702,8 +702,6 @@ function page_setup_convert_HTML() {
 //////////////////////
 window.addEventListener('load', function () {
 
-    score_check();
-
   // On page load, these are the things that should happen (in order):
   // 1. call "onload_pre()" if function exists
   // 2. modify simple HTML elements to be more complex interactive elements
@@ -807,5 +805,8 @@ window.addEventListener('load', function () {
 
   // 6. NEED TO SET UP "PREV VALUE" on any cloud check (monitor_cloud_list) items
   iHTML.initialize_prev_val();
+
+
+    score_check();
 
 });
