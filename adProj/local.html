@@ -45,7 +45,7 @@
 
                     #---------------------------------------------------------------------------
                         #<<<initializing variables>>>
-                    #Motor that spins the flywheel is motor A. Motor that moves activates launch letter is motor B. Rotating motor is motor C. Position motor is motor D.
+                    #Motor that spins the flywheel is motor A. Motor that activates launch is motor B. Rotating motor is motor C. Position motor is motor D.
                     hub = PrimeHub()
                     flywheel_motor = Motor('A')
                     launch_motor = Motor('B')
@@ -53,13 +53,15 @@
                     pos_motor = Motor('D')
 
                     #Pos_thresh should be the value that, if passed into go_to_pos, gets to the end of the board exactly
-                    pos_thresh = 200
-                    ang_thresh = 100
+                    pos_thresh = 5
+                    ang_thresh = 90
 
+                    #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
                     #Ratio by which position along x axis is translated into degrees run by motor
-                    pos_to_degrees_ratio = 5
+                    pos_to_degrees_ratio = 500 #<------ ADJUST THIS (experimentally derived)
                     #Ratio by which angle they want to aim is translated into degrees run by motor
-                    ang_to_degrees_ratio = 3
+                    ang_to_degrees_ratio = 30 #<------ ADJUST THIS (experimentally derived)
+                    #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
                     #how fast robot moves along x axis
                     pos_speed = 50
@@ -68,9 +70,7 @@
 
                     #Airtable Values (change manually to p1 or p2)
                     new_pos = CLOUD[P1_Pos]
-                    #current_pos = 
                     new_ang = CLOUD[P1_Ang]
-                    #current_ang = 
                     power = CLOUD[P1_Pow]
 
 
@@ -81,11 +81,8 @@
                         #makes sure robot doesn't go too far
                         if abs(n_pos) > pos_thresh:
                             n_pos = pos_thresh
-                        #check for sign
-                        difference_in_pos = current_pos - n_pos
-                        difference_in_pos_degrees = lin_position_to_degrees(difference_in_pos)
-                        pos_motor.run_to_degrees_counted(difference_in_pos_degrees, pos_speed)
-                        current_pos = n_pos
+                        n_pos_degrees = lin_position_to_degrees(n_pos)
+                        pos_motor.run_to_degrees_counted(n_pos_degrees, pos_speed)
 
                     #Converts chosen position along the board to a number of degrees the wheel needs to turn to get there.
                     def lin_position_to_degrees(difference_in_pos):
@@ -102,11 +99,8 @@
                         #makes sure robot doesn't go too far
                         if abs(n_ang) > ang_thresh:
                             n_ang = ang_thresh
-                        #check for sign
-                        difference_in_ang = current_ang - n_ang
-                        difference_in_ang_degrees = ang_position_to_degrees(difference_in_ang)
-                        ang_motor.run_to_degrees_counted(difference_in_ang_degrees, ang_speed)
-                        current_ang = n_ang
+                        n_ang_degrees = ang_position_to_degrees(n_ang)
+                        ang_motor.run_to_degrees_counted(n_ang_degrees, ang_speed)
 
                     def launch():
                         launch_motor.run_to_position(90, direction='shortest path', speed='100')
@@ -119,7 +113,7 @@
                     #makes sure launch motor is in the right place
                     launch_motor.run_to_position(0, direction='shortest path', speed='75')
                     go_to_pos(new_pos)
-                    flywheel_motor.start(power)
+                    flywheel_motor.start_at_power(power)
                     go_to_ang(new_ang)
                     wait_for_seconds(1)
                     launch()
@@ -153,7 +147,7 @@
 
                     #---------------------------------------------------------------------------
                         #<<<initializing variables>>>
-                    #Motor that spins the flywheel is motor A. Motor that moves activates launch letter is motor B. Rotating motor is motor C. Position motor is motor D.
+                    #Motor that spins the flywheel is motor A. Motor that activates launch is motor B. Rotating motor is motor C. Position motor is motor D.
                     hub = PrimeHub()
                     flywheel_motor = Motor('A')
                     launch_motor = Motor('B')
@@ -161,13 +155,15 @@
                     pos_motor = Motor('D')
 
                     #Pos_thresh should be the value that, if passed into go_to_pos, gets to the end of the board exactly
-                    pos_thresh = 200
-                    ang_thresh = 100
+                    pos_thresh = 5
+                    ang_thresh = 90
 
+                    #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
                     #Ratio by which position along x axis is translated into degrees run by motor
-                    pos_to_degrees_ratio = 5
+                    pos_to_degrees_ratio = 500 #<------ ADJUST THIS (experimentally derived)
                     #Ratio by which angle they want to aim is translated into degrees run by motor
-                    ang_to_degrees_ratio = 3
+                    ang_to_degrees_ratio = 30 #<------ ADJUST THIS (experimentally derived)
+                    #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
                     #how fast robot moves along x axis
                     pos_speed = 50
@@ -176,9 +172,7 @@
 
                     #Airtable Values (change manually to p1 or p2)
                     new_pos = CLOUD[P1_Pos]
-                    #current_pos = 
                     new_ang = CLOUD[P1_Ang]
-                    #current_ang = 
                     power = CLOUD[P1_Pow]
 
 
@@ -189,11 +183,8 @@
                         #makes sure robot doesn't go too far
                         if abs(n_pos) > pos_thresh:
                             n_pos = pos_thresh
-                        #check for sign
-                        difference_in_pos = current_pos - n_pos
-                        difference_in_pos_degrees = lin_position_to_degrees(difference_in_pos)
-                        pos_motor.run_to_degrees_counted(difference_in_pos_degrees, pos_speed)
-                        current_pos = n_pos
+                        n_pos_degrees = lin_position_to_degrees(n_pos)
+                        pos_motor.run_to_degrees_counted(n_pos_degrees, pos_speed)
 
                     #Converts chosen position along the board to a number of degrees the wheel needs to turn to get there.
                     def lin_position_to_degrees(difference_in_pos):
@@ -210,11 +201,8 @@
                         #makes sure robot doesn't go too far
                         if abs(n_ang) > ang_thresh:
                             n_ang = ang_thresh
-                        #check for sign
-                        difference_in_ang = current_ang - n_ang
-                        difference_in_ang_degrees = ang_position_to_degrees(difference_in_ang)
-                        ang_motor.run_to_degrees_counted(difference_in_ang_degrees, ang_speed)
-                        current_ang = n_ang
+                        n_ang_degrees = ang_position_to_degrees(n_ang)
+                        ang_motor.run_to_degrees_counted(n_ang_degrees, ang_speed)
 
                     def launch():
                         launch_motor.run_to_position(90, direction='shortest path', speed='100')
@@ -227,6 +215,86 @@
                     #makes sure launch motor is in the right place
                     go_to_pos(new_pos)
                     go_to_ang(new_ang)
+                </textarea>
+                
+                <input type=text id="cloud_reset" value="">
+            </div>
+
+        </div>
+
+        
+        <p><h3>Reset Position</h3></p>
+        
+        <!-- Code watching for Reset Position -->
+        <div class="cloud_check">
+            <b><em>Run to Zero</em></b>
+
+            <div type="cloud_check" cloud_compare="equal" cloud_action="download_code">
+                <input type=text id="cloud_name" value="P1_Ready">
+                <input type=text id="cloud_value" value="Reset Position">
+                <input type=text id="cloud_action_val" value="0">
+
+                <!-- Code that runs on Spike Prime (This code should run the robot to the correct position) -->
+                <textarea id="cloud_code"># MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
+                    from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+                    from spike.control import wait_for_seconds, wait_until, Timer
+
+                    #---------------------------------------------------------------------------
+                        #<<<initializing variables>>>
+                    #Motor that spins the flywheel is motor A. Motor that activates launch is motor B. Rotating motor is motor C. Position motor is motor D.
+                    hub = PrimeHub()
+                    flywheel_motor = Motor('A')
+                    launch_motor = Motor('B')
+                    ang_motor = Motor('C')
+                    pos_motor = Motor('D')
+
+                    #how fast robot moves along x axis
+                    pos_speed = 50
+                    #how fast robot changes angle
+                    ang_speed = 30
+
+                    #---------------------------------------------------------------------------
+                        #<<<code that runs>>>
+                    #gets everything back to center
+                    pos_motor.run_to_degrees_counted(0, pos_speed)
+                    ang_motor.run_to_degrees_counted(0, ang_speed)
+                </textarea>
+                
+                <input type=text id="cloud_reset" value="">
+            </div>
+
+        </div>
+
+        <p><h3>Zero Robot</h3></p>
+        
+        <!-- Code watching for Zero Position -->
+        <div class="cloud_check">
+            <b><em>Run to Zero</em></b>
+
+            <div type="cloud_check" cloud_compare="equal" cloud_action="download_code">
+                <input type=text id="cloud_name" value="P1_Ready">
+                <input type=text id="cloud_value" value="Zero Position">
+                <input type=text id="cloud_action_val" value="0">
+
+                <!-- Code that runs on Spike Prime (This code should run the robot to the correct position) -->
+                <textarea id="cloud_code"># MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
+                    from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+                    from spike.control import wait_for_seconds, wait_until, Timer
+
+                    #---------------------------------------------------------------------------
+                        #<<<initializing variables>>>
+                    #Motor that spins the flywheel is motor A. Motor that activates launch is motor B. Rotating motor is motor C. Position motor is motor D.
+                    hub = PrimeHub()
+                    flywheel_motor = Motor('A')
+                    launch_motor = Motor('B')
+                    ang_motor = Motor('C')
+                    pos_motor = Motor('D')
+
+                    #---------------------------------------------------------------------------
+                        #<<<code that runs>>>
+                    #Code that tells the robot that it's in the middle and not angled. Resets its origin point.
+                    pos_motor.set_degrees_counted(0)
+                    ang_motor.set_degrees_counted(0)
                 </textarea>
                 
                 <input type=text id="cloud_reset" value="">
