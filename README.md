@@ -1,9 +1,11 @@
-# EN1: final project template files
+# Aiden Bode Noah Tom EN1 Final Project
 
-Template code for Dr. E's EN1 (Simple Robotics) Final Project
+Our code for Dr. E's EN1 (Simple Robotics) Final Project - remote shuffle board game.
 
-## Students:
+## Features:
 
-You should use this repository as a Template (see button in top right) and copy it to your personal GitHub account.
+Two remote player websites and two local back end websites which connect via database.
 
-See Canvas for more instructions.
+Embedded variable MicroPython for LEGO code which controls our shuffle board robot.
+
+Image processing website which uses OpenCV.js to detect shuffle board pucks and automatically assigns point values to database for display to users.
