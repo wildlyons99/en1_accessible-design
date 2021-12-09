@@ -78,64 +78,113 @@
                             cv.cvtColor(dst, dst, cv.COLOR_GRAY2RGBA);
                                             
                             // setup
-                            let contours = new cv.MatVector();
-                            let hierarchy = new cv.Mat();
-                            var biggestVector = 0;
-                            var biggestVectorRadius = 0;
+                            // let contours = new cv.MatVector();
+                            // let hierarchy = new cv.Mat();
+                            
+                            
+                            // var biggestVector = 0;
+                            // var biggestVectorRadius = 0;
 
-                            // find contours
-                            cv.findContours(binary_img, contours, hierarchy, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE);
-                            console.log('- FOUND', contours.size(), 'contours');
+                            // // find contours
+                            // cv.findContours(binary_img, contours, hierarchy, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE);
+                            // console.log('- FOUND', contours.size(), 'contours');
 
-                            // go through contours
-                            if (contours.size() > 0) {
-                                // we are going to draw the contours in YELLOW
-                                // - create yellow color (255, 255, 0, 255)
-                                let yellow_color = new cv.Scalar(255, 255, 0, 255);
-                                // go through each contour:
-                                for (var i=0; i<contours.size(); i++) {
-                                    //cv.drawContours(dst, contours, i, yellow_color, 2, cv.LINE_8, hierarchy, 100);
+                            // // go through contours
+                            // if (contours.size() > 0) {
+                            //     // we are going to draw the contours in YELLOW
+                            //     // - create yellow color (255, 255, 0, 255)
+                            //     let yellow_color = new cv.Scalar(255, 255, 0, 255);
+                            //     // go through each contour:
+                            //     for (var i=0; i<contours.size(); i++) {
+                            //         //cv.drawContours(dst, contours, i, yellow_color, 2, cv.LINE_8, hierarchy, 100);
                                     
-                                    // note: you can find the "minimum enclosing circle" around the contour
-                                    // see: https://docs.opencv.org/3.4/dc/dcf/tutorial_js_contour_features.html
-                                    let circle = cv.minEnclosingCircle(contours.get(i));
-                                    // this circle has:
-                                    // - location: circle.center
-                                    // - radius: circle.radius
-                                    // so if it's big (radius > 10) then print to console:
-                                    console.log(' - circle at', circle.center, 'has radius', circle.radius);
+                            //         // note: you can find the "minimum enclosing circle" around the contour
+                            //         // see: https://docs.opencv.org/3.4/dc/dcf/tutorial_js_contour_features.html
+                            //         let circle = cv.minEnclosingCircle(contours.get(i));
+                            //         // this circle has:
+                            //         // - location: circle.center
+                            //         // - radius: circle.radius
+                            //         // so if it's big (radius > 10) then print to console:
+                            //         console.log(' - circle at', circle.center, 'has radius', circle.radius);
 
-                                    // finds biggest circle
-                                    if (circle.radius > biggestVectorRadius) {
-                                        biggestVector = i;
-                                        biggestVectorRadius = circle.radius;
+                            //         // finds biggest circle
+                            //         if (circle.radius > biggestVectorRadius) {
+                            //             biggestVector = i;
+                            //             biggestVectorRadius = circle.radius;
+                            //         }
+                            // }
+                                
+                                // gets list enclosing circles of 4 largest objects in analyzed color
+                                var contourList = find_objects(binary_img, 4, 10);
+
+                                let yellow_color = new cv.Scalar(255, 255, 0, 255);
+
+                                
+                                // defines width and height of calculated areas
+                                let score_rows = 2;
+                                let score_columns = 2;
+                                var score_width = output_width/score_columns;
+                                var score_height = output_height/score_rows;
+
+                                //draws this many rows and columns on image
+                                for (var i=0; i<score_columns; i++) {
+                                    for (var j=0; j<score_rows; j++){
+                                        cv.rectangle(dst, {x: i*score_width, y:j*score_height}, {x: score_width*(i+1), y: score_height*(j+1)}, yellow_color, 1);
                                     }
                                 }
-                                
-                                let biggestCircle = cv.minEnclosingCircle(contours.get(biggestVector));
-                                var biggestCircleRadius = biggestCircle.radius;
-                                var biggestCircleCenter = biggestCircle.center;
-                                // console.log('type is', typeof(biggestCircleCenter))
-                                // console.log(biggestCircleCenter.x)
-
-                                console.log('biggest circle is', biggestVector, 'at', biggestCircleCenter, 'with radius', biggestCircleRadius);
-
-                                // draws biggest circle on image
-                                cv.circle(dst, biggestCircleCenter, biggestCircleRadius, yellow_color, 3); // thickness of 3
-                                // draws center point
-                                //cv.circle(dst, biggestCircleCenter, 1, yellow_color, 1); // thickness of 3
-                                //draws cross at center
-                                let point1 = new cv.Point(biggestCircleCenter.x - 3, biggestCircleCenter.y);
-                                let point2 = new cv.Point(biggestCircleCenter.x + 3, biggestCircleCenter.y);
-                                cv.line(dst, point1, point2, yellow_color, 1, cv.LINE_AA, 0);
-
-                                let point3 = new cv.Point(biggestCircleCenter.x, biggestCircleCenter.y - 3);
-                                let point4 = new cv.Point(biggestCircleCenter.x, biggestCircleCenter.y + 3);
-                                cv.line(dst, point3, point4, yellow_color, 1, cv.LINE_AA, 0);
 
 
 
-                            }
+                                //x and y are top left corner of the area
+                                //width of areas are score_width & score_height
+                                var score_areas = [
+                                    {x: 0, y: 0, points: 1}, {x: score_width, y: 0, points: 10},
+                                    {x: 0, y: score_height, points: 100}, {x: score_width, y: score_height, points: 1000}
+                                ];
+
+                                var player_points = 0;
+                                //for every found circle
+                                for (var i=0; i<contourList.length; i++) {
+                                    //console.log('radius', i, 'is', contourList[i].radius);
+                                    //console.log('center', i, 'is', contourList[i].center);
+                                    //draws enclosing circle & center
+                                    cv.circle(dst, contourList[i].center, contourList[i].radius, yellow_color, 2); //draws circle
+                                    cv.circle(dst, contourList[i].center, 1, yellow_color, 1); // draws center
+                                    //searches through all score areas (score_areas[j])until it finds which one the puck is in, then gives score accordingly
+                                    for (var j=0; j<score_areas.length; j++){
+                                        var score_object = score_areas[j];
+                                        if (score_object.x < contourList[i].center.x && contourList[i].center.x < score_object.x + score_width && score_object.y < contourList[i].center.y && contourList[i].center.y < score_object.y + score_height){
+                                            player_points = player_points + score_object.points;
+                                        }
+                                    }
+
+                                }
+                                console.log(player_points);
+
+
+                                // let biggestCircle = cv.minEnclosingCircle(contours.get(biggestVector));
+                                // var biggestCircleRadius = biggestCircle.radius;
+                                // var biggestCircleCenter = biggestCircle.center;
+                                // // console.log('type is', typeof(biggestCircleCenter))
+                                // // console.log(biggestCircleCenter.x)
+
+                                // console.log('biggest circle is', biggestVector, 'at', biggestCircleCenter, 'with radius', biggestCircleRadius);
+
+                                // // draws biggest circle on image
+                                // cv.circle(dst, biggestCircleCenter, biggestCircleRadius, yellow_color, 3); // thickness of 3
+                                // // draws center point
+                                // //cv.circle(dst, biggestCircleCenter, 1, yellow_color, 1); // thickness of 3
+                                // //draws cross at center
+                                // let point1 = new cv.Point(biggestCircleCenter.x - 3, biggestCircleCenter.y);
+                                // let point2 = new cv.Point(biggestCircleCenter.x + 3, biggestCircleCenter.y);
+                                // cv.line(dst, point1, point2, yellow_color, 1, cv.LINE_AA, 0);
+
+                                // let point3 = new cv.Point(biggestCircleCenter.x, biggestCircleCenter.y - 3);
+                                // let point4 = new cv.Point(biggestCircleCenter.x, biggestCircleCenter.y + 3);
+                                // cv.line(dst, point3, point4, yellow_color, 1, cv.LINE_AA, 0);
+
+
+
                             
                             // display image with contours
                             cv.imshow(dst_canvas, dst);
@@ -143,7 +192,43 @@
                             binary_img.delete();
                             dst.delete();
                         }
-                        
+
+                        // takes in img_in
+                        // max objects is n number of disks you're looking for
+                        // min_size is a radius value
+
+                        function find_objects(img_in, max_objects, min_size) {
+                            // setup
+                            let contours = new cv.MatVector();
+                            let hierarchy = new cv.Mat();
+                            let contour_list = []; // tmp empty array for holding list
+                            
+                            // find contours
+                            cv.findContours(img_in, contours, hierarchy, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE);
+
+                            // go through contours
+                            if (contours.size() > 0) {
+                                for (i=0; i<contours.size(); i++) {
+                                    // check size
+                                    var circle = cv.minEnclosingCircle(contours.get(i));
+                                    if (circle.radius >= min_size) {
+                                        // push object into our array
+                                        contour_list.push(circle);
+                                    }
+                                }
+                                // sort results, biggest to smallest
+                                // code via: https://flaviocopes.com/how-to-sort-array-of-objects-by-property-javascript/
+                                contour_list.sort((a,b) => (a.radius > b.radius) ? -1 : 1);
+                            } else {
+                                // NO CONTOURS FOUND
+                                //console.log('NO CONTOURS FOUND');
+                            }
+
+                            // return, from sorted list, those that match
+                            return contour_list.slice(0, max_objects); // return the biggest ones
+                        }
+
+
                     </script>
                     <script>
                         var analyzing;
@@ -620,7 +705,7 @@
         
         <blockquote>
 
-            <script>
+            <!-- <script>
                 // going to use BINARY image created in previous step
                 // find the coutours in the image
                 // and then draw them (back onto the grayscale image)
@@ -708,7 +793,7 @@
                     dst.delete();
                 }
                 
-            </script>
+            </script> -->
 
             <p>
                 <button onclick="display_frame('video', 'out1'); threshold_rgb('out1', 'red1', 'green1', 'blue1'); draw_enclosing_circle('red1', 'out1', 'bigCircle');">Analyze Red</button>
