@@ -1,0 +1,318 @@
+<html lang="en">
+	<title>Shuffleboard (Local)</title>
+	
+    <head>
+	    <script src="https://cdn.jsdelivr.net/gh/tuftsceeo/SPIKE-Web-Interface/cdn/ServiceDock.js" charset="utf-8"></script>
+	    <script src="../src/secret.js" charset="utf-8"></script>
+	    <script src="../src/cloud.js" charset="utf-8"></script>
+	    <link rel="stylesheet" href="../src/style.css" />
+	
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    </head>
+
+
+    <body>
+
+        <!-- SERVICE DOCK -->
+        <div id="servicedock">
+            <service-airtable id="service_airtable" tablename="shuffle"></service-airtable>
+            <service-spike id="service_spike"></service-spike>
+        </div>
+
+        <h1>Local Interface</h1>
+
+        <p><h3>Launching Puck</h3></p>
+        
+        <!-- Code watching for Ready command. Looks for "Ready" in P1_Ready. -->
+        <div class="cloud_check">
+            <b><em>Monitor Cloud:</em></b>
+
+            <div type="cloud_check" cloud_compare="equal" cloud_action="download_code">
+                <input type=text id="cloud_name" value="P2_Ready">
+                <input type=text id="cloud_value" value="FIRE">
+                <input type=text id="cloud_action_val" value="0">
+
+                <!-- Code that runs on Spike Prime (This code should run the robot to the correct position, then launch the puck) -->
+                <textarea id="cloud_code"># MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
+                    from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+                    from spike.control import wait_for_seconds, wait_until, Timer
+
+                    #---------------------------------------------------------------------------
+                        #<<<initializing variables>>>
+                    #Motor that spins the flywheel is motor A. Motor that activates launch is motor B. Rotating motor is motor C. Position motor is motor D.
+                    hub = PrimeHub()
+                    flywheel_motor = Motor('A')
+                    launch_motor = Motor('B')
+                    ang_motor = Motor('C')
+                    pos_motor = Motor('D')
+
+                    #Pos_thresh should be the value that, if passed into go_to_pos, gets to the end of the board exactly
+                    pos_thresh = 5
+                    ang_thresh = 90
+
+                    #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+                    #Ratio by which position along x axis is translated into degrees run by motor
+                    pos_to_degrees_ratio = 500 #<------ ADJUST THIS (experimentally derived)
+                    #Ratio by which angle they want to aim is translated into degrees run by motor
+                    ang_to_degrees_ratio = 30 #<------ ADJUST THIS (experimentally derived)
+                    #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+
+                    #how fast robot moves along x axis
+                    pos_speed = 50
+                    #how fast robot changes angle
+                    ang_speed = 30
+
+                    #Airtable Values (change manually to p1 or p2)
+                    new_pos = CLOUD[P2_Pos]
+                    new_ang = CLOUD[P2_Ang]
+                    power = CLOUD[P2_Pow]
+
+
+                    #---------------------------------------------------------------------------
+                        #<<<defining functions>>>
+                    #Takes robot to chosen position. n_pos is the position you want to go to. 0 should be the middle of the board. If n_pos > pos_thresh, just goes to the end of the board.
+                    def go_to_pos(n_pos):
+                        #makes sure robot doesn't go too far
+                        if abs(n_pos) > pos_thresh:
+                            n_pos = pos_thresh
+                        n_pos_degrees = lin_position_to_degrees(n_pos)
+                        pos_motor.run_to_degrees_counted(n_pos_degrees, pos_speed)
+
+                    #Converts chosen position along the board to a number of degrees the wheel needs to turn to get there.
+                    def lin_position_to_degrees(difference_in_pos):
+                        difference_in_pos_degrees = difference_in_pos * pos_to_degrees_ratio
+                        return difference_in_pos_degrees
+
+                    #Converts chosen angle to a number of degrees the wheel needs to turn to get there.
+                    def ang_position_to_degrees(difference_in_ang):
+                        difference_in_ang_degrees = difference_in_ang * ang_to_degrees_ratio
+                        return difference_in_ang_degrees
+
+                    #Takes robot to chosen position. n_ang is the angle you want to go to. 0 should be perfectly straight. If n_ang > ang_thresh, just goes to the maximum angle.
+                    def go_to_ang(n_ang):
+                        #makes sure robot doesn't go too far
+                        if abs(n_ang) > ang_thresh:
+                            n_ang = ang_thresh
+                        n_ang_degrees = ang_position_to_degrees(n_ang)
+                        ang_motor.run_to_degrees_counted(n_ang_degrees, ang_speed)
+
+                    def launch():
+                        launch_motor.run_to_position(90, direction='shortest path', speed='100')
+                        wait_for_seconds(0.5)
+                        launch_motor.run_to_position(0, direction='shortest path', speed='75')
+
+
+                    #---------------------------------------------------------------------------
+                        #<<<code that runs>>>
+                    #makes sure launch motor is in the right place
+                    launch_motor.run_to_position(0, direction='shortest path', speed='75')
+                    go_to_pos(new_pos)
+                    flywheel_motor.start_at_power(power)
+                    go_to_ang(new_ang)
+                    wait_for_seconds(1)
+                    launch()
+                    #makes sure launch motor is in the right place again
+                    launch_motor.run_to_position(0, direction='shortest path', speed='75')
+                    flywheel_motor.stop()
+                    #return to middle
+                    #go_to_ang(0)
+                    #go_to_pos(0)
+                </textarea>
+                
+                <input type=text id="cloud_reset" value="">
+            </div>
+        </div>
+
+        <p><h3>Testing Position</h3></p>
+        
+        <!-- Code watching for "run to position" or "test" function. Looks for "Test" in P1_Ready. -->
+        <div class="cloud_check">
+            <b><em>Monitor Cloud:</em></b>
+
+            <div type="cloud_check" cloud_compare="equal" cloud_action="download_code">
+                <input type=text id="cloud_name" value="P2_Ready">
+                <input type=text id="cloud_value" value="Aim">
+                <input type=text id="cloud_action_val" value="0">
+
+                <!-- Code that runs on Spike Prime (This code should run the robot to the correct position) -->
+                <textarea id="cloud_code"># MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
+                    from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+                    from spike.control import wait_for_seconds, wait_until, Timer
+
+                    #---------------------------------------------------------------------------
+                        #<<<initializing variables>>>
+                    #Motor that spins the flywheel is motor A. Motor that activates launch is motor B. Rotating motor is motor C. Position motor is motor D.
+                    hub = PrimeHub()
+                    flywheel_motor = Motor('A')
+                    launch_motor = Motor('B')
+                    ang_motor = Motor('C')
+                    pos_motor = Motor('D')
+
+                    #Pos_thresh should be the value that, if passed into go_to_pos, gets to the end of the board exactly
+                    pos_thresh = 5
+                    ang_thresh = 90
+
+                    #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+                    #Ratio by which position along x axis is translated into degrees run by motor
+                    pos_to_degrees_ratio = 500 #<------ ADJUST THIS (experimentally derived)
+                    #Ratio by which angle they want to aim is translated into degrees run by motor
+                    ang_to_degrees_ratio = 30 #<------ ADJUST THIS (experimentally derived)
+                    #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+
+                    #how fast robot moves along x axis
+                    pos_speed = 50
+                    #how fast robot changes angle
+                    ang_speed = 30
+
+                    #Airtable Values (change manually to p1 or p2)
+                    new_pos = CLOUD[P1_Pos]
+                    new_ang = CLOUD[P1_Ang]
+                    power = CLOUD[P1_Pow]
+
+
+                    #---------------------------------------------------------------------------
+                        #<<<defining functions>>>
+                    #Takes robot to chosen position. n_pos is the position you want to go to. 0 should be the middle of the board. If n_pos > pos_thresh, just goes to the end of the board.
+                    def go_to_pos(n_pos):
+                        #makes sure robot doesn't go too far
+                        if abs(n_pos) > pos_thresh:
+                            n_pos = pos_thresh
+                        n_pos_degrees = lin_position_to_degrees(n_pos)
+                        pos_motor.run_to_degrees_counted(n_pos_degrees, pos_speed)
+
+                    #Converts chosen position along the board to a number of degrees the wheel needs to turn to get there.
+                    def lin_position_to_degrees(difference_in_pos):
+                        difference_in_pos_degrees = difference_in_pos * pos_to_degrees_ratio
+                        return difference_in_pos_degrees
+
+                    #Converts chosen angle to a number of degrees the wheel needs to turn to get there.
+                    def ang_position_to_degrees(difference_in_ang):
+                        difference_in_ang_degrees = difference_in_ang * ang_to_degrees_ratio
+                        return difference_in_ang_degrees
+
+                    #Takes robot to chosen position. n_ang is the angle you want to go to. 0 should be perfectly straight. If n_ang > ang_thresh, just goes to the maximum angle.
+                    def go_to_ang(n_ang):
+                        #makes sure robot doesn't go too far
+                        if abs(n_ang) > ang_thresh:
+                            n_ang = ang_thresh
+                        n_ang_degrees = ang_position_to_degrees(n_ang)
+                        ang_motor.run_to_degrees_counted(n_ang_degrees, ang_speed)
+
+                    def launch():
+                        launch_motor.run_to_position(90, direction='shortest path', speed='100')
+                        wait_for_seconds(0.5)
+                        launch_motor.run_to_position(0, direction='shortest path', speed='75')
+
+
+                    #---------------------------------------------------------------------------
+                        #<<<code that runs>>>
+                    #makes sure launch motor is in the right place
+                    go_to_pos(new_pos)
+                    go_to_ang(new_ang)
+                </textarea>
+                
+                <input type=text id="cloud_reset" value="">
+            </div>
+
+        </div>
+
+        
+        <p><h3>Reset Position</h3></p>
+        
+        <!-- Code watching for Reset Position -->
+        <div class="cloud_check">
+            <b><em>Run to Zero</em></b>
+
+            <div type="cloud_check" cloud_compare="equal" cloud_action="download_code">
+                <input type=text id="cloud_name" value="P2_Ready">
+                <input type=text id="cloud_value" value="Reset Position">
+                <input type=text id="cloud_action_val" value="0">
+
+                <!-- Code that runs on Spike Prime (This code should run the robot to the correct position) -->
+                <textarea id="cloud_code"># MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
+                    from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+                    from spike.control import wait_for_seconds, wait_until, Timer
+
+                    #---------------------------------------------------------------------------
+                        #<<<initializing variables>>>
+                    #Motor that spins the flywheel is motor A. Motor that activates launch is motor B. Rotating motor is motor C. Position motor is motor D.
+                    hub = PrimeHub()
+                    flywheel_motor = Motor('A')
+                    launch_motor = Motor('B')
+                    ang_motor = Motor('C')
+                    pos_motor = Motor('D')
+
+                    #how fast robot moves along x axis
+                    pos_speed = 50
+                    #how fast robot changes angle
+                    ang_speed = 30
+
+                    #---------------------------------------------------------------------------
+                        #<<<code that runs>>>
+                    #gets everything back to center
+                    pos_motor.run_to_degrees_counted(0, pos_speed)
+                    ang_motor.run_to_degrees_counted(0, ang_speed)
+                </textarea>
+                
+                <input type=text id="cloud_reset" value="">
+            </div>
+
+        </div>
+
+        <p><h3>Zero Robot</h3></p>
+        
+        <!-- Code watching for Zero Position -->
+        <div class="cloud_check">
+            <b><em>Run to Zero</em></b>
+
+            <div type="cloud_check" cloud_compare="equal" cloud_action="download_code">
+                <input type=text id="cloud_name" value="P1_Ready">
+                <input type=text id="cloud_value" value="Zero Position">
+                <input type=text id="cloud_action_val" value="0">
+
+                <!-- Code that runs on Spike Prime (This code should run the robot to the correct position) -->
+                <textarea id="cloud_code"># MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
+                    from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+                    from spike.control import wait_for_seconds, wait_until, Timer
+
+                    #---------------------------------------------------------------------------
+                        #<<<initializing variables>>>
+                    #Motor that spins the flywheel is motor A. Motor that activates launch is motor B. Rotating motor is motor C. Position motor is motor D.
+                    hub = PrimeHub()
+                    flywheel_motor = Motor('A')
+                    launch_motor = Motor('B')
+                    ang_motor = Motor('C')
+                    pos_motor = Motor('D')
+
+                    #---------------------------------------------------------------------------
+                        #<<<code that runs>>>
+                    #Code that tells the robot that it's in the middle and not angled. Resets its origin point.
+                    pos_motor.set_degrees_counted(0)
+                    ang_motor.set_degrees_counted(0)
+                </textarea>
+                
+                <input type=text id="cloud_reset" value="">
+            </div>
+
+        </div>
+    <hr>
+
+        <h2>My Project Quick Links:</h2>
+    <p>
+        <ul>
+        <li><a href="./remote1.html" target=_blank>My Project Remote Page</a></li>
+        <li><a href="./remote2.html" target=_blank>My Project Remote Page 2 </a></li>
+        <li><a href="./local1.html" target=_blank> Local Page 1</a></li>
+        <li><a href="./local2.html" target=_blank> Local Page 2</a></li>
+        </ul>
+    </p>
+        <p><a href="../index.html">Return back to the main homepage.</a></p>
+
+    </body>
+</html>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-    <title>P1 Shuffleboard</title>
+    <title>P2 Shuffleboard</title>
     <head>
         <script src="https://cdn.jsdelivr.net/gh/tuftsceeo/SPIKE-Web-Interface/cdn/ServiceDock.js" charset="utf-8"></script>
       <script src="../src/secret.js" charset="utf-8"></script>
@@ -26,10 +26,10 @@
     </div>
 
     <!-- Creating Player 1 Jumbotron on Top -->
-    <div class="p-1 mb-2 rounded-2" style="background-color: #eb4646;">
+    <div class="p-1 mb-2 rounded-2" style="background-color: #2596be;">
       <div class="container-fluid py-4">
         <!-- #2596be -->
-        <h2 class="display-1 fw-bold center" style="color: white;">Player 1</h1>
+        <h2 class="display-1 fw-bold center" style="color: white;">Player 2</h1>
       </div>
     </div>
 
@@ -40,32 +40,32 @@
         <div class="row" >
             <div class="col">
                 <p><img src="../images/position.png" width="50" alt="position"> Position on the Board:
-                    <input type=range id="pos" cloud_action='update' cloud_name='P1_Pos' cloud_min='-5' cloud_max='5' min='-5' max='5' value='0'>
+                    <input type=range id="pos" cloud_action='update' cloud_name='P2_Pos' cloud_min='-5' cloud_max='5' min='-5' max='5' value='0'>
                     <span id="dpos"> </span> 
                 </p>
                 <p><img src="../images/rotate.png" width="50" alt="aim"> Shooting Angle:
-                    <input type=range id="ang" cloud_action='update' cloud_name='P1_Ang' cloud_min='-90' cloud_max='90' min='-90' max='90' value='0'>
+                    <input type=range id="ang" cloud_action='update' cloud_name='P2_Ang' cloud_min='-90' cloud_max='90' min='-90' max='90' value='0'>
                     <span id="dang"> </span>
                 </p>
             </div>
             <div class="col">
                 <p style="font-size:50px" class="center"> 
                 <img src="../images/aim.png" width="75" alt="aim">
-                <button class="btn-dark center" cloud_action='update' cloud_name='P1_Ready'>Aim</button></p>
+                <button class="btn-dark center" cloud_action='update' cloud_name='P2_Ready'>Aim</button></p>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col">
                 <p><br><img src="../images/power.png" width="50" alt="power"> Power:
-                    <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='0' cloud_max='100' min='0' max='100' value='0'>
+                    <input type=range id="pow" cloud_action='update' cloud_name='P2_Pow' cloud_min='0' cloud_max='100' min='0' max='100' value='0'>
                     <span id="dpow"> </span>
                 </p>
             </div>
             <div class="col">
                 <p style="font-size:50px" class="center">
                 <img src="../images/launch.png" width="75" alt="launch">
-                <button  class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button></p>
+                <button  class="btn-warning center" cloud_action='update' cloud_name='P2_Ready'>FIRE</button></p>
             </div>
         </div>
 

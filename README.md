@@ -9,3 +9,6 @@ Two remote player websites and two local back end websites which connect via dat
 Embedded variable MicroPython for LEGO code which controls our shuffle board robot.
 
 Image processing website which uses OpenCV.js to detect shuffle board pucks and automatically assigns point values to database for display to users.
+
+#Links
+[Homepage](https://wildlyons99.github.io/homepage/) 
