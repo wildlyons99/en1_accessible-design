@@ -123,14 +123,14 @@
                             // }
                                 
                                 // gets list enclosing circles of 4 largest objects in analyzed color
-                                var contourList = find_objects(binary_img, 4, 10);
+                                var contourList = find_objects(binary_img, 4, 17);
 
                                 let yellow_color = new cv.Scalar(255, 255, 0, 255);
 
                                 
                                 // defines width and height of calculated areas
-                                let score_rows = 2;
-                                let score_columns = 2;
+                                let score_rows = 4;
+                                let score_columns = 4;
                                 var score_width = output_width/score_columns;
                                 var score_height = output_height/score_rows;
 
@@ -146,8 +146,10 @@
                                 //x and y are top left corner of the area
                                 //width of areas are score_width & score_height
                                 var score_areas = [
-                                    {x: 0, y: 0, points: 1}, {x: score_width, y: 0, points: 10},
-                                    {x: 0, y: score_height, points: 100}, {x: score_width, y: score_height, points: 1000}
+                                    {x: 0, y: 0, points: 8}, {x: score_width, y: 0, points: 2}, {x: 2*score_width, y: 0, points: 2}, {x: 3*score_width, y: 0, points: 8},
+                                    {x: 0, y: score_height, points: 2}, {x: score_width, y: score_height, points: 10}, {x: 2*score_width, y: score_height, points: 10}, {x: 3*score_width, y: score_height, points: 2},
+                                    {x: 0, y: 2*score_height, points: 2}, {x: score_width, y: 2*score_height, points: 10}, {x: 2*score_width, y: 2*score_height, points: 10}, {x: 3*score_width, y: 2*score_height, points: 2},
+                                    {x: 0, y: 3*score_height, points: 8}, {x: score_width, y: 3*score_height, points: 2}, {x: 2*score_width, y: 3*score_height, points: 2}, {x: 3*score_width, y: 3*score_height, points: 8}
                                 ];
 
                                 var player_points = 0;

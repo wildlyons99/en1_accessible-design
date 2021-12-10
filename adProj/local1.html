@@ -40,6 +40,7 @@
 
                 <!-- Code that runs on Spike Prime (This code should run the robot to the correct position, then launch the puck) -->
                 <textarea id="cloud_code"># MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
+                    # MicroPython for LEGO Hardware (LEGO Education's SPIKE Prime)
                     from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
                     from spike.control import wait_for_seconds, wait_until, Timer
 
@@ -47,10 +48,10 @@
                         #<<<initializing variables>>>
                     #Motor that spins the flywheel is motor A. Motor that activates launch is motor B. Rotating motor is motor C. Position motor is motor D.
                     hub = PrimeHub()
-                    flywheel_motor = Motor('A')
-                    launch_motor = Motor('B')
-                    ang_motor = Motor('C')
-                    pos_motor = Motor('D')
+                    flywheel_motor = Motor('F')
+                    launch_motor = Motor('E')
+                    ang_motor = Motor('D')
+                    pos_motor = Motor('C')
 
                     #Pos_thresh should be the value that, if passed into go_to_pos, gets to the end of the board exactly
                     pos_thresh = 5
@@ -60,7 +61,7 @@
                     #Ratio by which position along x axis is translated into degrees run by motor
                     pos_to_degrees_ratio = 500 #<------ ADJUST THIS (experimentally derived)
                     #Ratio by which angle they want to aim is translated into degrees run by motor
-                    ang_to_degrees_ratio = 30 #<------ ADJUST THIS (experimentally derived)
+                    ang_to_degrees_ratio = 3 #<------ ADJUST THIS (experimentally derived)
                     #VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
                     #how fast robot moves along x axis
@@ -73,16 +74,41 @@
                     new_ang = CLOUD[P1_Ang]
                     power = CLOUD[P1_Pow]
 
-
                     #---------------------------------------------------------------------------
                         #<<<defining functions>>>
+
+                    #Writes final_pos to currentpos.txt
+                    def update_pos(final_pos):
+                        with open('currentpos.txt', 'w') as f:
+                            position = str(final_pos)
+                            f.write(position)
+
+                    #Writes final_pos to currentang.txt
+                    def update_ang(final_pos):
+                        with open('currentang.txt', 'w') as f:
+                            position = str(final_pos)
+                            f.write(position)
+
+                    #returns current linear position stored in currentpos.txt hosted locally
+                    def current_pos():
+                        with open('currentpos.txt', 'r') as f:
+                            print(f.read())
+                            return int(f.read())
+
+                        #returns current angular position stored in currentang.txt hosted locally
+                    def current_ang():
+                        with open('currentang.txt', 'r') as f:
+                            print(f.read())
+                            return int(f.read())
+
                     #Takes robot to chosen position. n_pos is the position you want to go to. 0 should be the middle of the board. If n_pos > pos_thresh, just goes to the end of the board.
                     def go_to_pos(n_pos):
                         #makes sure robot doesn't go too far
                         if abs(n_pos) > pos_thresh:
                             n_pos = pos_thresh
-                        n_pos_degrees = lin_position_to_degrees(n_pos)
+                        n_pos_degrees = lin_position_to_degrees(n_pos - current_pos())
                         pos_motor.run_to_degrees_counted(n_pos_degrees, pos_speed)
+                        update_pos(n_pos)
 
                     #Converts chosen position along the board to a number of degrees the wheel needs to turn to get there.
                     def lin_position_to_degrees(difference_in_pos):
@@ -99,30 +125,31 @@
                         #makes sure robot doesn't go too far
                         if abs(n_ang) > ang_thresh:
                             n_ang = ang_thresh
-                        n_ang_degrees = ang_position_to_degrees(n_ang)
+                        n_ang_degrees = ang_position_to_degrees(n_ang - current_ang())
                         ang_motor.run_to_degrees_counted(n_ang_degrees, ang_speed)
+                        update_ang(n_ang)
 
+                    #activates lever which pushes puck into flywheel
                     def launch():
-                        launch_motor.run_to_position(90, direction='shortest path', speed='100')
+                        launch_motor.run_to_position(75, direction='shortest path', speed=100)
                         wait_for_seconds(0.5)
-                        launch_motor.run_to_position(0, direction='shortest path', speed='75')
+                        launch_motor.run_to_position(45, direction='shortest path', speed=75)
 
 
                     #---------------------------------------------------------------------------
                         #<<<code that runs>>>
                     #makes sure launch motor is in the right place
-                    launch_motor.run_to_position(0, direction='shortest path', speed='75')
+                    launch_motor.run_to_position(45, direction='shortest path', speed=75)
                     go_to_pos(new_pos)
-                    flywheel_motor.start_at_power(power)
+                    flywheel_motor.start_at_power(-1 * power)
                     go_to_ang(new_ang)
-                    wait_for_seconds(1)
-                    launch()
-                    #makes sure launch motor is in the right place again
-                    launch_motor.run_to_position(0, direction='shortest path', speed='75')
+                    wait_for_seconds(3)
+                    for i in range(1):
+                        launch()
+                        #makes sure launch motor is in the right place again
+                        launch_motor.run_to_position(45, direction='shortest path', speed=75)
+                        wait_for_seconds(2)
                     flywheel_motor.stop()
-                    #return to middle
-                    #go_to_ang(0)
-                    #go_to_pos(0)
                 </textarea>
                 
                 <input type=text id="cloud_reset" value="">
