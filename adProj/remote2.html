@@ -35,14 +35,39 @@
 
     <br>
 
+    <!-- Button trigger modal -->
+    <p class="center"> <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Click Here to See Instructions! 
+    </button> </p>
+    <br>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Instructions</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            This is a two player game. The goal of the game is to get your pucks onto the highest scoring boxes while knocking your opponents’ off. The game is played over four rounds. Players select the angle the puck is shot from and how much power it’s launched with for each round. The players take turns turns shooting their pucks until each player has shot four pucks. The player with the most points wins!
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
     <!-- Sliders for Determining Position -->
     <div class="container-fluid center" >
         <div class="row" >
             <div class="col">
-                <p><img src="../images/position.png" width="50" alt="position"> Position on the Board:
+                <!-- <p><img src="../images/position.png" width="50" alt="position"> Position on the Board:
                     <input type=range id="pos" cloud_action='update' cloud_name='P2_Pos' cloud_min='-5' cloud_max='5' min='-5' max='5' value='0'>
                     <span id="dpos"> </span> 
-                </p>
+                </p> -->
                 <p><img src="../images/rotate.png" width="50" alt="aim"> Shooting Angle:
                     <input type=range id="ang" cloud_action='update' cloud_name='P2_Ang' cloud_min='-90' cloud_max='90' min='-90' max='90' value='0'>
                     <span id="dang"> </span>
