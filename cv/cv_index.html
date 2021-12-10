@@ -512,7 +512,7 @@
                     b_dst = new cv.Mat();
                     cv.cvtColor(img, b_dst, cv.COLOR_RGBA2GRAY); // convert image to grayscale
                     
-                    var threshold = 50; // SAME THRESHOLD FOR ALL
+                    var threshold = 30; // SAME THRESHOLD FOR ALL
                     for (var i=0; i<img.data.length; i+=4) {
                         var r = img.data[i];   // red
                         var g = img.data[i+1]; // green
