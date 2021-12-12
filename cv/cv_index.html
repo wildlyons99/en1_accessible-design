@@ -152,10 +152,10 @@
                                 //x and y are top left corner of the area
                                 //width of areas are score_width & score_height
                                 var score_areas = [
-                                    {x: 0, y: 0, points: 8}, {x: score_width, y: 0, points: 2}, {x: 2*score_width, y: 0, points: 2}, {x: 3*score_width, y: 0, points: 8},
-                                    {x: 0, y: score_height, points: 2}, {x: score_width, y: score_height, points: 10}, {x: 2*score_width, y: score_height, points: 10}, {x: 3*score_width, y: score_height, points: 2},
-                                    {x: 0, y: 2*score_height, points: 2}, {x: score_width, y: 2*score_height, points: 10}, {x: 2*score_width, y: 2*score_height, points: 10}, {x: 3*score_width, y: 2*score_height, points: 2},
-                                    {x: 0, y: 3*score_height, points: 8}, {x: score_width, y: 3*score_height, points: 2}, {x: 2*score_width, y: 3*score_height, points: 2}, {x: 3*score_width, y: 3*score_height, points: 8}
+                                    {x: 0, y: 0, points: document.getElementById('1x1').value}, {x: score_width, y: 0, points: document.getElementById('1x2').value}, {x: 2*score_width, y: 0, points: document.getElementById('1x3').value}, {x: 3*score_width, y: 0, points: document.getElementById('1x4').value},
+                                    {x: 0, y: score_height, points: document.getElementById('2x1').value}, {x: score_width, y: score_height, points: document.getElementById('2x2').value}, {x: 2*score_width, y: score_height, points: document.getElementById('2x3').value}, {x: 3*score_width, y: score_height, points: document.getElementById('2x4').value},
+                                    {x: 0, y: 2*score_height, points: document.getElementById('3x1').value}, {x: score_width, y: 2*score_height, points: document.getElementById('3x2').value}, {x: 2*score_width, y: 2*score_height, points: document.getElementById('3x3').value}, {x: 3*score_width, y: 2*score_height, points: document.getElementById('3x4').value},
+                                    {x: 0, y: 3*score_height, points: document.getElementById('4x1').value}, {x: score_width, y: 3*score_height, points: document.getElementById('4x2').value}, {x: 2*score_width, y: 3*score_height, points: document.getElementById('4x3').value}, {x: 3*score_width, y: 3*score_height, points: document.getElementById('4x4').value}
                                 ];
 
                                 var player_points = 0;
@@ -173,7 +173,7 @@
                                     for (var j=0; j<score_areas.length; j++){
                                         var score_object = score_areas[j];
                                         if (score_object.x < contourList[i].center.x && contourList[i].center.x < score_object.x + score_width && score_object.y < contourList[i].center.y && contourList[i].center.y < score_object.y + score_height){
-                                            player_points = player_points + score_object.points;
+                                            player_points = player_points + parseInt(score_object.points);
                                         }
                                     }
 
@@ -301,40 +301,40 @@
     <br>
     <div class="center slidecontainer">
     <p><b>Threshold</b></p>
-    <input type="range" min="1" max="100" value="50" class="slider center cvSlider" id="threshRange">
+    <input type="range" min="1" max="100" value="30" class="slider center cvSlider" id="threshRange">
     <p>Value: <span id="demo"></span></p>
     <p><b>Min Size of Circle</b></p>
-    <input type="range" min="1" max="100" value="50" class="slider center cvSlider" id="minSizeRange">
+    <input type="range" min="1" max="100" value="20" class="slider center cvSlider" id="minSizeRange">
     <p>Value: <span id="demo1"></span></p>
     <p><b>Max Size of Circle</b></p>
-    <input type="range" min="1" max="100" value="50" class="slider center cvSlider" id="maxSizeRange">
+    <input type="range" min="1" max="100" value="40" class="slider center cvSlider" id="maxSizeRange">
     <p>Value: <span id="demo2"></span></p>
     </div>
     <div class='center tablecontainer'>
         <table class='center'>
             <tr>
-                <td><input type="number"></td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
+                <td><input value='8' id='1x1' type="number"></td>
+                <td><input value='2' id='1x2' type="number"></td>
+                <td><input value='2' id='1x3' type="number"></td>
+                <td><input value='8' id='1x4' type="number"></td>
             </tr>
             <tr>
-                <td>5</td>
-                <td>6</td>
-                <td>7</td>
-                <td>8</td>
+                <td><input value='2' id='2x1' type="number"></td>
+                <td><input value='10' id='2x2' type="number"></td>
+                <td><input value='10' id='2x3' type="number"></td>
+                <td><input value='2' id='2x4' type="number"></td>
             </tr>
             <tr>
-                <td>9</td>
-                <td>10</td>
-                <td>11</td>
-                <td>12</td>
+                <td><input value='2' id='3x1' type="number"></td>
+                <td><input value='10' id='3x2' type="number"></td>
+                <td><input value='10' id='3x3' type="number"></td>
+                <td><input value='2' id='3x4' type="number"></td>
             </tr>
             <tr>
-                <td>13</td>
-                <td>14</td>
-                <td>15</td>
-                <td>16</td>
+                <td><input value='8' id='4x1' type="number"></td>
+                <td><input value='2' id='4x2' type="number"></td>
+                <td><input value='2' id='4x3' type="number"></td>
+                <td><input value='8' id='4x4' type="number"></td>
             </tr>
         </table>
     </div>
