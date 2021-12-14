@@ -69,19 +69,33 @@
                     <span id="dang"> </span>
                 </p>
                 <p><br><img src="../images/power.png" width="50" alt="power"> Power:
-                    <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='35' cloud_max='75' min='35' max='75' value='35'>
+                    <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='25' cloud_max='75' min='25' max='75' value='25'>
                     <span id="dpow"> </span>
                 </p>
             </div>
             <div class="col">
-                <p style="font-size:50px" class="center">
+                <p style="font-size:50px" class="center" id='fire'>
                 <img src="../images/launch.png" width="75" alt="launch">
-                <button  id='fire' class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button>
-                <button class="btn-danger center"> Please Wait 
-                    <div class="spinner-border text-dark" width="75" role="status"> </div>
+                <button  onclick="set_loading()"  class="btn-warning center" cloud_action='update set_loading' cloud_name='P1_Ready'>FIRE</button> </p>
+                <p style="font-size:50px; display: none;" class="center" id="loading"> 
+                    <button class="btn-danger center" > Please Wait 
+                    <div class="spinner-border text-dark" width="75" role="status"> </div> </button>
                 </button> </p>
             </div>
         </div>
+
+    <script>
+        function set_loading() {
+            document.getElementById("fire").style.display = "none";
+            document.getElementById("loading").style.display = "inline";
+            setTimeout(reset_loading, 5000)
+        }
+        function reset_loading() {
+            document.getElementById("fire").style.display = "inline";
+            document.getElementById("loading").style.display = "none";
+        }
+
+    </script>
 
     <h2> Score: </h2>
     <p style="font-size:50px;"> <span id="span1" style="color: #eb4646;"> </span> <b>-</b> <span id="p2-score" style="color: #2596be;"> </span> </p>
