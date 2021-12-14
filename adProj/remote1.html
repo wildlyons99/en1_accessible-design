@@ -76,7 +76,7 @@
             <div class="col">
                 <p style="font-size:50px" class="center" id='fire'>
                 <img src="../images/launch.png" width="75" alt="launch">
-                <button  onclick="set_loading()"  class="btn-warning center" cloud_action='update set_loading' cloud_name='P1_Ready'>FIRE</button> </p>
+                <button id="fire_btn" class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button> </p>
                 <p style="font-size:50px; display: none;" class="center" id="loading"> 
                     <button class="btn-danger center" > Please Wait 
                     <div class="spinner-border text-dark" width="75" role="status"> </div> </button>
@@ -85,10 +85,13 @@
         </div>
 
     <script>
+        
+        document.getElementById('fire_btn').addEventListener('click', set_loading);
+
         function set_loading() {
             document.getElementById("fire").style.display = "none";
             document.getElementById("loading").style.display = "inline";
-            setTimeout(reset_loading, 5000)
+            setTimeout(reset_loading, 10000)
         }
         function reset_loading() {
             document.getElementById("fire").style.display = "inline";

@@ -94,6 +94,19 @@
             </div>
         </div>
 
+        <script>
+        function set_loading() {
+            document.getElementById("fire").style.display = "none";
+            document.getElementById("loading").style.display = "inline";
+            setTimeout(reset_loading, 5000)
+        }
+        function reset_loading() {
+            document.getElementById("fire").style.display = "inline";
+            document.getElementById("loading").style.display = "none";
+        }
+
+    </script>
+
     <h2> Score: </h2>
     <p style="font-size:50px;"> <span id="span1" style="color: #eb4646;"> </span> <b>-</b> <span id="p2-score" style="color: #2596be;"> </span> </p>
   </div>
