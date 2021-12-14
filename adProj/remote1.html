@@ -62,35 +62,24 @@
 
     <!-- Sliders for Determining Position -->
     <div class="container-fluid center" >
-        <div class="row" >
+        <div class="row">
             <div class="col">
-                <!-- <p><img src="../images/position.png" width="50" alt="position"> Position on the Board:
-                    <input type=range id="pos" cloud_action='update' cloud_name='P1_Pos' cloud_min='-5' cloud_max='5' min='-5' max='5' value='0'>
-                    <span id="dpos"> </span> 
-                </p> -->
                 <p><img src="../images/rotate.png" width="50" alt="aim"> Shooting Angle:
                     <input type=range id="ang" cloud_action='update' cloud_name='P1_Ang' cloud_min='-30' cloud_max='30' min='-30' max='30' value='0'>
                     <span id="dang"> </span>
                 </p>
-            </div>
-            <div class="col">
-                <p style="font-size:50px" class="center"> 
-                <img src="../images/aim.png" width="75" alt="aim">
-                <button class="btn-dark center" cloud_action='update' cloud_name='P1_Ready'>Aim</button></p>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col">
                 <p><br><img src="../images/power.png" width="50" alt="power"> Power:
-                    <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='30' cloud_max='100' min='30' max='100' value='0'>
+                    <input type=range id="pow" cloud_action='update' cloud_name='P1_Pow' cloud_min='35' cloud_max='75' min='35' max='75' value='35'>
                     <span id="dpow"> </span>
                 </p>
             </div>
             <div class="col">
                 <p style="font-size:50px" class="center">
                 <img src="../images/launch.png" width="75" alt="launch">
-                <button  class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button></p>
+                <button  id='fire' class="btn-warning center" cloud_action='update' cloud_name='P1_Ready'>FIRE</button>
+                <button class="btn-danger center"> Please Wait 
+                    <div class="spinner-border text-dark" width="75" role="status"> </div>
+                </button> </p>
             </div>
         </div>
 
@@ -99,13 +88,6 @@
   </div>
 
      <script> 
-        // var slider1 = document.getElementById("pos");
-        // var output1 = document.getElementById("dpos");
-        // output1.innerHTML = slider1.value;
-
-        // slider1.oninput = function() {
-        //     output1.innerHTML = this.value;
-        // }
 
         var slider2 = document.getElementById("ang");
         var output2 = document.getElementById("dang");
@@ -140,16 +122,7 @@
    
     <hr>
     <div class='center'> <button class="btn btn-primary btn-sm center" cloud_action='update' cloud_name='P1_Ready'>Reset Position</button></p> </div>
-    <div class="center"> <div id="google_translate_element"></div> </div>
-
    
-    <script type="text/javascript">
-    function googleTranslateElementInit() {
-    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-    }
-    </script>
-
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
