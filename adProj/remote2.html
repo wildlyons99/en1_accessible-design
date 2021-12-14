@@ -62,50 +62,41 @@
 
     <!-- Sliders for Determining Position -->
     <div class="container-fluid center" >
-        <div class="row" >
+        <div class="row">
             <div class="col">
-                <!-- <p><img src="../images/position.png" width="50" alt="position"> Position on the Board:
-                    <input type=range id="pos" cloud_action='update' cloud_name='P2_Pos' cloud_min='-5' cloud_max='5' min='-5' max='5' value='0'>
-                    <span id="dpos"> </span> 
-                </p> -->
                 <p><img src="../images/rotate.png" width="50" alt="aim"> Shooting Angle:
                     <input type=range id="ang" cloud_action='update' cloud_name='P2_Ang' cloud_min='-30' cloud_max='30' min='-30' max='30' value='0'>
                     <span id="dang"> </span>
                 </p>
-            </div>
-            <div class="col">
-                <p style="font-size:50px" class="center"> 
-                <img src="../images/aim.png" width="75" alt="aim">
-                <button class="btn-dark center" cloud_action='update' cloud_name='P2_Ready'>Aim</button></p>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col">
                 <p><br><img src="../images/power.png" width="50" alt="power"> Power:
                     <input type=range id="pow" cloud_action='update' cloud_name='P2_Pow' cloud_min='30' cloud_max='100' min='30' max='100' value='0'>
                     <span id="dpow"> </span>
                 </p>
             </div>
             <div class="col">
-                <p style="font-size:50px" class="center">
+                <p style="font-size:50px" class="center" id="fire">
                 <img src="../images/launch.png" width="75" alt="launch">
-                <button  class="btn-warning center" cloud_action='update' cloud_name='P2_Ready'>FIRE</button></p>
+                <button  id="fire_btn" class="btn-warning center" cloud_action='update' cloud_name='P2_Ready'>FIRE</button></p>
+                <p style="font-size:50px; display: none;" class="center" id="loading"> 
+                    <button class="btn-danger center" > Please Wait 
+                    <div class="spinner-border text-dark" width="75" role="status"> </div> </button>
+                </button> </p>
             </div>
         </div>
 
         <script>
-        function set_loading() {
-            document.getElementById("fire").style.display = "none";
-            document.getElementById("loading").style.display = "inline";
-            setTimeout(reset_loading, 5000)
-        }
-        function reset_loading() {
-            document.getElementById("fire").style.display = "inline";
-            document.getElementById("loading").style.display = "none";
-        }
+            document.getElementById('fire_btn').addEventListener('click', set_loading);
 
-    </script>
+            function set_loading() {
+                document.getElementById("fire").style.display = "none";
+                document.getElementById("loading").style.display = "inline";
+                setTimeout(reset_loading, 5000)
+            }
+            function reset_loading() {
+                document.getElementById("fire").style.display = "inline";
+                document.getElementById("loading").style.display = "none";
+            }
+        </script>
 
     <h2> Score: </h2>
     <p style="font-size:50px;"> <span id="span1" style="color: #eb4646;"> </span> <b>-</b> <span id="p2-score" style="color: #2596be;"> </span> </p>
@@ -150,18 +141,6 @@
             setTimeout(score_check, 10000);
         }
     </script>
-   
-    <hr>
-    <div class="center"> <div id="google_translate_element"></div> </div>
-
-   
-    <script type="text/javascript">
-    function googleTranslateElementInit() {
-    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-    }
-    </script>
-
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
