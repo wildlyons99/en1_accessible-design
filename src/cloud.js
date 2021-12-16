@@ -795,6 +795,8 @@ window.addEventListener('load', function () {
   // 6. NEED TO SET UP "PREV VALUE" on any cloud check (monitor_cloud_list) items
   iHTML.initialize_prev_val();
 
+// var p1_score = cloud_get("P1_Score");
+// var p2_score = cloud_get("P2_Score");
 
 function score_check() {
             var p1_output = document.getElementById('span1');
@@ -809,4 +811,29 @@ function score_check() {
 
     setTimeout(score_check, 1000);
 
+function check_winner() {
+    // document.getElementById("p1win").style.display = "inherit";
+    if (cloud_get('Win_Force') == 'Won') {
+        var p1score = cloud_get("P1_Score");
+        var p2score = cloud_get("P2_Score"); 
+        if (p1score == p2score) {
+            document.getElementById('pwinner').innerHTML = "It's a Tie!";
+        }
+        if (p1score > p2score) {
+            var tempv = "Player 1 Wins";
+            document.getElementById('pwinner').innerHTML = tempv;
+        }
+        if (p2score > p1score) {
+            document.getElementById('pwinner').innerHTML = "Player 2 Wins!";
+        }
+        document.getElementById("pwin").style.display = "inherit";
+    }
+    else {
+        setInterval(check_winner, 5000);
+    }
+}
+setTimeout(check_winner, 1000);
+
 });
+
+
